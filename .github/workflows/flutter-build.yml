@@ -17,18 +17,18 @@ jobs:
           flutter-version: '3.19.0'
           channel: 'stable'
 
-      - name: Clean Android build files
-        run: rm -rf android/
-
-      - name: Recreate Flutter project
+      - name: Recreate Flutter project structure
         run: |
-          cd ..
-          mv svga_player_app temp_svga_player_app
-          flutter create --platforms=android --no-pub --no-android-x-migration temp_svga_player_app
-          cp -R temp_svga_player_app/android/ svga_player_app/android/
-          cp -R svga_player_app/assets/ temp_svga_player_app/assets/
-          mv temp_svga_player_app svga_player_app
-
+          mv pubspec.yaml pubspec.temp.yaml
+          mv lib lib.temp
+          mv assets assets.temp
+          rm -rf android/ ios/ .idea/
+          flutter create .
+          rm -rf pubspec.yaml lib assets
+          mv pubspec.temp.yaml pubspec.yaml
+          mv lib.temp lib
+          mv assets.temp assets
+          
       - name: Flutter pub get
         run: flutter pub get
 
