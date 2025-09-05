@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
+import 'package:svgaplayer_flutter/parser.dart';
+import 'package:svgaplayer_flutter/player.dart';
 import 'package:svga_player_app/screens/player_screen.dart';
 
 class ListScreen extends StatefulWidget {
@@ -60,12 +61,11 @@ class _ListScreenState extends State<ListScreen> {
                     leading: SizedBox(
                       width: 60,
                       height: 60,
-                      child: SVGAPlayer(
-                        fileUrl: filePath,
-                        onPlayerReady: (player) async {
-                          player.loops = 0;
-                          player.frame = 1;
-                          player.startAnimation();
+                      child: SVGAPlayerWidget(
+                        filePath: filePath,
+                        onPlayerReady: (controller) {
+                          controller.loops = 0;
+                          controller.startAnimation();
                         },
                       ),
                     ),
