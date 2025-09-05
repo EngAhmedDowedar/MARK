@@ -1,35 +1,40 @@
 name: Flutter Build
 
-# Run this workflow on a new push to the `main` branch
 on:
   push:
     branches:
       - main
 
-# Define the build job
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the code from the repository
       - uses: actions/checkout@v4
 
-      # Step 2: Set up the Flutter environment
       - uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.19.0' # Adjust this version if needed
+          flutter-version: '3.19.0'
           channel: 'stable'
 
-      # Step 3: Get all the packages (dependencies)
+      - name: Clean Android build files
+        run: rm -rf android/
+
+      - name: Recreate Flutter project
+        run: |
+          cd ..
+          mv svga_player_app temp_svga_player_app
+          flutter create --platforms=android --no-pub --no-android-x-migration temp_svga_player_app
+          cp -R temp_svga_player_app/android/ svga_player_app/android/
+          cp -R svga_player_app/assets/ temp_svga_player_app/assets/
+          mv temp_svga_player_app svga_player_app
+
       - name: Flutter pub get
         run: flutter pub get
 
-      # Step 4: Build the Android release APK
       - name: Build Android APK
         run: flutter build apk --release --target-platform android-arm64
 
-      # Step 5: Upload the APK as a build artifact
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
