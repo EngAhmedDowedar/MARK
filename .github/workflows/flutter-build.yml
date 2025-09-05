@@ -23,7 +23,7 @@ jobs:
           mv lib lib.temp
           mv assets assets.temp
           rm -rf android/ ios/ .idea/
-          flutter create .
+          flutter create --project-name mark .
           rm -rf pubspec.yaml lib assets
           mv pubspec.temp.yaml pubspec.yaml
           mv lib.temp lib
